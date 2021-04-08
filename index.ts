@@ -27,22 +27,12 @@ const s3Client = new S3Client({
 const s3Bucket = 'app-emea-prod-photo'
 
 export async function getBucketKeysList(key: string): Promise<_Object[]> {
-  try {
-    console.dir({ s3Bucket, key, err: 'get item from s3 bucket' })
-    const response: ListObjectsV2CommandOutput = await s3Client.send(new ListObjectsV2Command({
-      Bucket: s3Bucket,
-      Delimiter: '/test',
-      Prefix: key,
-    }))
-    return response.Contents || []
-  } catch (err) {
-    if (err.code === 'NoSuchKey') {
-      console.dir({ s3Bucket, key, err: 'nothing found for this key' })
-      return []
-    }
-    console.dir({ err, s3Bucket, key, err2s: 'error occured attempting to get item from s3 bucket' })
-    throw err
-  }
+  const response: ListObjectsV2CommandOutput = await s3Client.send(new ListObjectsV2Command({
+    Bucket: s3Bucket,
+    Delimiter: '/test',
+    Prefix: key,
+  }))
+  return response.Contents || []
 }
 
 export async function uploadObject(Key: string): Promise<PutObjectCommandOutput> {
