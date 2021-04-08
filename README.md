@@ -1,13 +1,13 @@
-#WHAT???
+# WHAT???
 AWSSDK 3 cheatsheet :O
 
-#HOW???
+# HOW???
 run the following
 ```
 npm run start
 ```
 
-#OUTPUT?
+# OUTPUT?
 It should show the entire procedure from fetch list, put, get object and delete. a file named downloaded-blahblah.jpeg should be generated which came from S3
 
 #PRE-REQUISITES?
