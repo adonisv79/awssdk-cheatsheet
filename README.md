@@ -10,7 +10,7 @@ npm run start
 # OUTPUT?
 It should show the entire procedure from fetch list, put, get object and delete. a file named downloaded-blahblah.jpeg should be generated which came from S3
 
-#PRE-REQUISITES?
+# PRE-REQUISITES?
 ## S3 Bucket with IAM
 You must have an S3 bucket and IAM account in AWS which you can use
 
