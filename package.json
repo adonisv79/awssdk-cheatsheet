@@ -1,0 +1,30 @@
+{
+  "name": "awssdk-cheatsheet",
+  "version": "1.0.0",
+  "description": "Just something to remind us how we did it for AWSSDK",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adonisv79/awssdk-cheatsheet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adonisv79/awssdk-cheatsheet/issues"
+  },
+  "homepage": "https://github.com/adonisv79/awssdk-cheatsheet#readme",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.11.0",
+    "@aws-sdk/s3-request-presigner": "^3.11.0",
+    "@types/node": "^14.14.37",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
