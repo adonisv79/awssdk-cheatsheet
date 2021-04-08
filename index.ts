@@ -71,7 +71,7 @@ export async function getObjectBuffer(Key: string): Promise<Buffer> {
   return await streamToString(Body);
 }
 
-export async function getS3SignedKey(Key: string, expiresIn: number) {
+export async function getS3SignedKey(Key: string, expiresIn: number): Promise<string> {
   return await getSignedUrl(s3Client, new GetObjectCommand({
     Bucket: s3Bucket,
     Key,
@@ -97,13 +97,13 @@ async function run() {
   console.log(`Uploading a new file with key ${NEW_FILE_KEY}...`)
   const uploadResult = await uploadObject(NEW_FILE_KEY)
   console.dir(uploadResult)
-  console.log(`Uploading success...`)
+  console.log(`Uploading success!`)
   console.log('********************************************************************************')
   listBucket = await getBucketKeysList('test/')
   console.log('The bucket now contains the following objects...')
   console.dir(listBucket)
   console.log('********************************************************************************')
-  const fileBuffer = await getObjectBuffer('test/chunli.jpeg')
+  const fileBuffer = await getObjectBuffer(NEW_FILE_KEY)
   const filename = `downloaded-${Date.now()}-${Math.random() * 10}.jpeg`
   fs.writeFileSync(filename, fileBuffer, 'UTF-8');
   console.log(`Copy of file from S3 stored in ${filename}`)
