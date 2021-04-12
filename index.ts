@@ -4,17 +4,18 @@ import {
   GetObjectCommand,
   ListObjectsV2Command,
   ListObjectsV2CommandOutput,
-  PutObjectCommand,
-  PutObjectCommandOutput,
   S3Client,
   _Object,
 } from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import fs, { createReadStream } from 'fs'
 import dotenv from 'dotenv'
-import { Readable } from 'stream'
+import { Readable, Stream } from 'stream'
 
 dotenv.config()
+
+const uploadStreamPassthrough = new Stream.PassThrough()
 
 const s3Client = new S3Client({
   credentials: {
@@ -35,13 +36,21 @@ export async function getBucketKeysList(key: string): Promise<_Object[]> {
   return response.Contents || []
 }
 
-export async function uploadObject(Key: string): Promise<PutObjectCommandOutput> {
-  const rs = createReadStream('./test.jpg')
-  return await s3Client.send(new PutObjectCommand({
-    Bucket: s3Bucket,
-    Key,
-    Body: rs,
-  }))
+export async function uploadObject(Key: string) {
+  createReadStream('./test.jpg').pipe(uploadStreamPassthrough)
+  const upload = new Upload({
+    client: s3Client,
+    params: {
+      Bucket: s3Bucket,
+      Key,
+      Body: uploadStreamPassthrough,
+    }
+  })
+  upload.on('httpUploadProgress', (progress) => {
+    console.log(`UPLOAD PROGRESS part ${progress.part}:`)
+    console.dir(progress)
+  })
+  return await upload.done();
 }
 
 export async function getObjectBuffer(Key: string): Promise<Buffer> {
@@ -86,6 +95,7 @@ async function run() {
   console.log('********************************************************************************')
   console.log(`Uploading a new file with key ${NEW_FILE_KEY}...`)
   const uploadResult = await uploadObject(NEW_FILE_KEY)
+  console.dir(typeof uploadResult)
   console.dir(uploadResult)
   console.log(`Uploading success!`)
   console.log('********************************************************************************')
